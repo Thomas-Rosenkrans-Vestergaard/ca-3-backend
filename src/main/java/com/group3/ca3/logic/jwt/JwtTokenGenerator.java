@@ -1,4 +1,4 @@
-package com.group3.ca3.rest;
+package com.group3.ca3.logic.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;

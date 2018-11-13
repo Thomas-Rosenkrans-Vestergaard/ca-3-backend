@@ -1,14 +1,18 @@
 package com.group3.ca3.repositories;
 
 import com.group3.ca3.data.entities.User;
+import com.group3.ca3.rest.JpaConnection;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 public class JpaUserRepository implements UserRepository
 {
-    private static EntityManagerFactory factory;
+    private static EntityManagerFactory factory = JpaConnection.create();
 
+    public JpaUserRepository(EntityManagerFactory factory) {
+        this.factory = factory;
+    }
 
     @Override
     public User create(String username, String password, String email) {
@@ -19,11 +23,11 @@ public class JpaUserRepository implements UserRepository
     }
 
 
-
-
     @Override
     public User delete(User user) {
-        return null;
+        EntityManager entityManager = factory.createEntityManager();
+        entityManager.remove(user);
+        return user;
     }
 
     @Override
@@ -31,6 +35,14 @@ public class JpaUserRepository implements UserRepository
         EntityManager entityManager = factory.createEntityManager();
         return entityManager.createNamedQuery("User.findById", User.class)
                 .setParameter("id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        EntityManager entityManager = factory.createEntityManager();
+        return entityManager.createNamedQuery("User.findByEmail", User.class)
+                .setParameter("email", email)
                 .getSingleResult();
     }
 

@@ -1,4 +1,4 @@
-package com.group3.ca3.rest;
+package com.group3.ca3.logic.jwt;
 
 import java.security.SecureRandom;
 import java.util.Base64;

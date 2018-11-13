@@ -1,5 +1,5 @@
 package com.group3.ca3.data.entities;
-import com.group3.ca3.rest.Role;
+import com.group3.ca3.logic.jwt.Role;
 
 import javax.persistence.*;
 import static javax.persistence.GenerationType.IDENTITY;
@@ -8,10 +8,15 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @NamedQueries(
         {
-@NamedQuery(name = "User.findByID" ,
-        query = "SELECT u FROM User u WHERE u.id = :id")
-}
+
+@NamedQuery(name = "User.findById" ,
+            query = "SELECT u FROM User u WHERE u.id = :id"),
+
+@NamedQuery(name= "User.findByEmail",
+            query = "SELECT u FROM User u WHERE u.email = :email")
+        }
 )
+
 
 @Entity
 @Table(name = "user_")

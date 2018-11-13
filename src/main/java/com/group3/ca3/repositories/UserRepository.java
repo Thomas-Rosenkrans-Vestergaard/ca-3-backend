@@ -10,4 +10,6 @@ public interface UserRepository {
 
     public User getById(Long id);
 
+    public User getByEmail(String email);
+
 }
