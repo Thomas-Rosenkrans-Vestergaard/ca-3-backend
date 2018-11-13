@@ -21,11 +21,11 @@ public class HttpClient
                 connection.setRequestProperty(entry.getKey(), entry.getValue());
             }
 
-            if (httpRequest.body != null)
+            if (httpRequest.body != null) {
                 connection.setDoOutput(true);
-
-            try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
-                wr.write(httpRequest.body.getBytes("UTF-8"));
+                try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+                    wr.write(httpRequest.body.getBytes("UTF-8"));
+                }
             }
 
             int          statusCode = connection.getResponseCode();
