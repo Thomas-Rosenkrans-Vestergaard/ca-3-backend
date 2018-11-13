@@ -1,4 +1,4 @@
-package com.group3.ca3.repositories;
+package com.group3.ca3.logic.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -10,7 +10,6 @@ import com.group3.ca3.logic.jwt.AuthenticationContext;
 public class JwtTokenUnpacker {
 
     private final BasicJwtSecret secret;
-
 
     public JwtTokenUnpacker(BasicJwtSecret secret) {
         this.secret = secret;

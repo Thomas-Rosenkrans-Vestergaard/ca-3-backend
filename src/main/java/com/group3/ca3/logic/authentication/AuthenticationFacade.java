@@ -2,7 +2,7 @@ package com.group3.ca3.logic.authentication;
 
 import com.group3.ca3.data.entities.User;
 import com.group3.ca3.logic.jwt.AuthenticationContext;
-import com.group3.ca3.repositories.JpaUserRepository;
+import com.group3.ca3.data.repositories.JpaUserRepository;
 import com.group3.ca3.rest.JpaConnection;
 import org.mindrot.jbcrypt.BCrypt;
 

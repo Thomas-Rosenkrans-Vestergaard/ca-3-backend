@@ -1,4 +1,4 @@
-package com.group3.ca3.repositories;
+package com.group3.ca3.data.repositories;
 
 import com.group3.ca3.data.entities.User;
 import com.group3.ca3.rest.JpaConnection;

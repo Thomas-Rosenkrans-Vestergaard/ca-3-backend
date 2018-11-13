@@ -1,4 +1,4 @@
-package com.group3.ca3.data.dto;
+package com.group3.ca3.rest.dto;
 
 public class UserDTO
 {
