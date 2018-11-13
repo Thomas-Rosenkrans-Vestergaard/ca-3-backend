@@ -1,6 +1,7 @@
 package com.group3.ca3.rest.http;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -18,6 +19,13 @@ public class HttpClient
             connection.setRequestMethod(httpRequest.method);
             for (Map.Entry<String, String> entry : httpRequest.headers.entrySet()) {
                 connection.setRequestProperty(entry.getKey(), entry.getValue());
+            }
+
+            if (httpRequest.body != null) {
+                connection.setDoOutput(true);
+                try (DataOutputStream wr = new DataOutputStream(connection.getOutputStream())) {
+                    wr.write(httpRequest.body.getBytes("UTF-8"));
+                }
             }
 
             int          statusCode = connection.getResponseCode();
