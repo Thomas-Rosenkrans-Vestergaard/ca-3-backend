@@ -42,9 +42,6 @@ public class User
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<File> files = new ArrayList<>();
-
     public User(String name, String passwordHash, String email)
     {
         this.name = name;
@@ -100,17 +97,6 @@ public class User
     public User setRole(Role role)
     {
         this.role = role;
-        return this;
-    }
-
-    public List<File> getFiles()
-    {
-        return this.files;
-    }
-
-    public User setFiles(List<File> files)
-    {
-        this.files = files;
         return this;
     }
 }
