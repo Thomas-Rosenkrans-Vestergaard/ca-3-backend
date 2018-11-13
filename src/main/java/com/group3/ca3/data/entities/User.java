@@ -1,19 +1,22 @@
 package com.group3.ca3.data.entities;
+
 import com.group3.ca3.logic.jwt.Role;
 
 import javax.persistence.*;
-import static javax.persistence.GenerationType.IDENTITY;
+import java.util.ArrayList;
+import java.util.List;
 
+import static javax.persistence.GenerationType.IDENTITY;
 
 
 @NamedQueries(
         {
 
-@NamedQuery(name = "User.findById" ,
-            query = "SELECT u FROM User u WHERE u.id = :id"),
+                @NamedQuery(name = "User.findById",
+                        query = "SELECT u FROM User u WHERE u.id = :id"),
 
-@NamedQuery(name= "User.findByEmail",
-            query = "SELECT u FROM User u WHERE u.email = :email")
+                @NamedQuery(name = "User.findByEmail",
+                        query = "SELECT u FROM User u WHERE u.email = :email")
         }
 )
 
@@ -36,52 +39,78 @@ public class User
     @Column(nullable = false)
     private Role role;
 
-    public User(String name, String passwordHash, String email) {
+    @Column(nullable = false)
+    private String email;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<File> files = new ArrayList<>();
+
+    public User(String name, String passwordHash, String email)
+    {
         this.name = name;
         this.passwordHash = passwordHash;
         this.email = email;
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public String getPasswordHash() {
+    public String getPasswordHash()
+    {
         return passwordHash;
     }
 
-    public void setPasswordHash(String passwordHash) {
+    public void setPasswordHash(String passwordHash)
+    {
         this.passwordHash = passwordHash;
     }
 
-    public String getEmail() {
+    public String getEmail()
+    {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email)
+    {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
+    public Role getRole()
+    {
+        return this.role;
     }
 
-    public void setRole(Role role) {
+    public User setRole(Role role)
+    {
         this.role = role;
+        return this;
     }
 
-    @Column(nullable = false)
-    private String email;
+    public List<File> getFiles()
+    {
+        return this.files;
+    }
+
+    public User setFiles(List<File> files)
+    {
+        this.files = files;
+        return this;
+    }
 }
