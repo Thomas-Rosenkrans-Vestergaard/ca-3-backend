@@ -12,8 +12,6 @@ public class AuthenticationContext {
         this.id = id;
     }
 
-
-
     public Role getRole() {
         return role;
     }
