@@ -1,5 +1,7 @@
-package rest;
+package com.group3.ca3.rest;
 
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,18 +11,16 @@ import java.net.URL;
 
 public class CreateConnection {
 
-    public static void main(String[] args) throws Exception {
-        CreateConnection comeon = new CreateConnection();
-        comeon.sendGetRequest("https://dog.ceo/api/breeds/image/random");
-    }
-
-    public void sendGetRequest(String URL) throws IOException {
+    public String sendGetRequest(String URL, boolean apiCode) throws IOException {
         String url = URL;
         URL obj = new URL(url);
         HttpURLConnection httpConnection = (HttpURLConnection) obj.openConnection();
         httpConnection.setRequestMethod("GET");
         httpConnection.setRequestProperty("Accept", "application/json");
-        //httpConnection.setRequestProperty("Content-Type", "application/json");
+        httpConnection.setRequestProperty("Content-Type", "application/json");
+        if(apiCode){
+            httpConnection.setRequestProperty("X-Mashape-Key", "RW266iQrnBmshH28TA2TN5GQmdHpp1QYvt1jsnQlO3vvFK36pM");
+        }
         httpConnection.connect();
         int responseCode = httpConnection.getResponseCode();
         BufferedReader in = new BufferedReader(
@@ -33,7 +33,6 @@ public class CreateConnection {
         }
         in.close();
         httpConnection.disconnect();
-
-        System.out.println(response.toString());
+        return response.toString();
     }
 }
