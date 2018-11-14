@@ -6,6 +6,7 @@ import com.group3.ca3.data.repositories.JpaUserRepository;
 import com.group3.ca3.logic.jwt.BasicJwtSecret;
 import com.group3.ca3.logic.jwt.JwtTokenGenerator;
 import com.group3.ca3.rest.JpaConnection;
+import org.jetbrains.annotations.NotNull;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthenticationFacade
@@ -31,6 +32,7 @@ public class AuthenticationFacade
     }
 
 
+    @NotNull
     private Boolean checkPassword(String password, String hashedPassword)
     {
         return BCrypt.checkpw(password, hashedPassword);

@@ -6,7 +6,7 @@ public interface JwtSecret {
     byte[] getValue();
 
 
-    byte[] regenerate(int bytes);
+    byte[] regenerate(int bytes) throws JwtSecretGenerationException;
 
 
 }

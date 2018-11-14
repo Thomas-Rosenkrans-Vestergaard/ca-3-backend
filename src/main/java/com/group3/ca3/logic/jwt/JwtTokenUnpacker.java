@@ -9,9 +9,9 @@ import com.group3.ca3.logic.jwt.AuthenticationContext;
 
 public class JwtTokenUnpacker {
 
-    private final BasicJwtSecret secret;
+    private final FileJwtSecret secret;
 
-    public JwtTokenUnpacker(BasicJwtSecret secret) {
+    public JwtTokenUnpacker(FileJwtSecret secret) {
         this.secret = secret;
     }
 
