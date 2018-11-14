@@ -3,15 +3,15 @@ package com.group3.ca3.rest.filters;
 //lavet af OAuath
 
 
-import com.group3.ca3.logic.jwt.*;
-import jdk.internal.vm.compiler.collections.EconomicMap;
-
+import com.group3.ca3.logic.jwt.AuthenticationContext;
+import com.group3.ca3.logic.jwt.FileJwtSecret;
+import com.group3.ca3.logic.jwt.JwtTokenUnpacker;
+import com.group3.ca3.logic.jwt.Role;
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.ext.Provider;
 import java.io.File;
 import java.io.IOException;
 
