@@ -5,7 +5,6 @@ import com.group3.ca3.data.entities.File;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class JpaFileRepository implements FileRepository
@@ -18,13 +17,14 @@ public class JpaFileRepository implements FileRepository
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    @Override public File create(String title, int size, String mime, String extension, String fileIOKey, LocalDateTime expiry)
+    @Override
+    public File create(String title, int size, String mime, String extension)
     {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
             entityManager.getTransaction().begin();
-            File file = new File(title, size, mime, extension, fileIOKey, expiry);
+            File file = new File(title, size, mime, extension);
             entityManager.persist(file);
             entityManager.getTransaction().commit();
             return file;

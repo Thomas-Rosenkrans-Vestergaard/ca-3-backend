@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface FileRepository
 {
-    File create(String title, int size, String mime, String extension, String fileIOKey, LocalDateTime expiry);
+    File create(String title, int size, String mime, String extension);
 
     List<File> get();
 

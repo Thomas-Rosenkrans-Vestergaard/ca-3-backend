@@ -24,25 +24,17 @@ public class File
     @Column(nullable = false)
     private String extension;
 
-    @Column(nullable = false)
-    private String fileIOKey;
-
-    @Column(nullable = false)
-    private LocalDateTime expiry;
-
     public File()
     {
 
     }
 
-    public File(String title, int size, String mime, String extension, String fileIOKey, LocalDateTime expiry)
+    public File(String title, int size, String mime, String extension)
     {
         this.title = title;
         this.size = size;
         this.mime = mime;
         this.extension = extension;
-        this.fileIOKey = fileIOKey;
-        this.expiry = expiry;
     }
 
     public Long getId()
@@ -97,28 +89,6 @@ public class File
     public File setExtension(String extension)
     {
         this.extension = extension;
-        return this;
-    }
-
-    public String getFileIOKey()
-    {
-        return this.fileIOKey;
-    }
-
-    public File setFileIOKey(String fileIOKey)
-    {
-        this.fileIOKey = fileIOKey;
-        return this;
-    }
-
-    public LocalDateTime getExpiry()
-    {
-        return this.expiry;
-    }
-
-    public File setExpiry(LocalDateTime expiry)
-    {
-        this.expiry = expiry;
         return this;
     }
 }

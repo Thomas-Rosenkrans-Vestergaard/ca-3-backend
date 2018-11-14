@@ -8,12 +8,13 @@ import java.io.IOException;
 
 @Path("dogs")
 public class DogImageResource {
+
     CreateConnection con = new CreateConnection();
 
     @GET
     @Path("{breed}")
     public Response getDogById(@PathParam("breed") String breed) throws IOException {
-        String response = con.sendGetRequest("https://dog.ceo/api/breed/"+breed+"/images", false);
+        String response = con.sendGetRequest("https://dog.ceo/api/breed/" + breed + "/images", false);
         return Response.ok(response).build();
     }
 
