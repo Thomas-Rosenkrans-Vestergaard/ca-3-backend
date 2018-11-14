@@ -1,12 +1,10 @@
 package com.group3.ca3.logic.facade;
 
 import com.group3.ca3.data.entities.User;
-import com.group3.ca3.logic.jwt.AuthenticationContext;
 import com.group3.ca3.data.repositories.JpaUserRepository;
 import com.group3.ca3.logic.jwt.BasicJwtSecret;
 import com.group3.ca3.logic.jwt.JwtTokenGenerator;
 import com.group3.ca3.rest.JpaConnection;
-import org.jetbrains.annotations.NotNull;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthenticationFacade
@@ -31,15 +29,14 @@ public class AuthenticationFacade
         return null;
     }
 
-
-    @NotNull
     private Boolean checkPassword(String password, String hashedPassword)
     {
         return BCrypt.checkpw(password, hashedPassword);
     }
 
-    public String generateAuthenticationToken(User user){
-        BasicJwtSecret jwtSecret = new BasicJwtSecret(512/8);
+    public String generateAuthenticationToken(User user)
+    {
+        BasicJwtSecret    jwtSecret = new BasicJwtSecret(512 / 8);
         JwtTokenGenerator generator = new JwtTokenGenerator(jwtSecret);
         return generator.generateToken(user);
 
