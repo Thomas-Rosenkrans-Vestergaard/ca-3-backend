@@ -7,14 +7,12 @@ import com.group3.ca3.logic.FileFacade;
 import com.group3.ca3.logic.GoogleDriveFacade;
 import com.group3.ca3.rest.dto.FileDTO;
 import com.group3.ca3.rest.http.HttpException;
+import org.apache.tika.Tika;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLConnection;
 import java.util.Base64;
 import java.util.List;
 
@@ -91,11 +89,6 @@ public class FileResource
      */
     private String getMimeType(byte[] data)
     {
-        try {
-            InputStream is = new ByteArrayInputStream(data);
-            return URLConnection.guessContentTypeFromStream(is);
-        } catch (IOException e) {
-            return null;
-        }
+        return new Tika().detect(data);
     }
 }
