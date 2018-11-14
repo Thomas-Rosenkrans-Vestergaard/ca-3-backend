@@ -8,8 +8,8 @@ import java.io.IOException;
 
 
 //makes the filter discovereble to JAX-RS during runtime
-@Provider
-
+//@Provider
+//
 //This annotation makes the filter apply globally, to all resources
 @PreMatching
 

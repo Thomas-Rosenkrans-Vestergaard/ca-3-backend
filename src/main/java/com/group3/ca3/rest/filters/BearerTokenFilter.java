@@ -12,7 +12,7 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 
-@Provider
+//@Provider
 @PreMatching
 public class BearerTokenFilter implements ContainerRequestFilter
 {
