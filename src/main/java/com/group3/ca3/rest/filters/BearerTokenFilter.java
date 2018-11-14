@@ -3,8 +3,6 @@ package com.group3.ca3.rest.filters;
 //lavet af OAuath
 
 
-
-
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -14,17 +12,18 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 
-
 @Provider
 @PreMatching
-public class BearerTokenFilter implements ContainerRequestFilter {
+public class BearerTokenFilter implements ContainerRequestFilter
+{
 
     //også kendt som bearer
     private static final String AUTHENTICATION_SCHEME = "Bearer";
 
-    public void filter(ContainerRequestContext ctx) throws IOException {
+    public void filter(ContainerRequestContext ctx) throws IOException
+    {
 
-       String authHeader = ctx.getHeaderString(HttpHeaders.AUTHORIZATION);
+        String authHeader = ctx.getHeaderString(HttpHeaders.AUTHORIZATION);
 
         if (!isTokenBasedAuthentication(authHeader)) {
             throw new NotAuthorizedException("Bearer");
@@ -37,16 +36,19 @@ public class BearerTokenFilter implements ContainerRequestFilter {
 
     }
 
-    private String parseToken(String authHeader) {
+    private String parseToken(String authHeader)
+    {
         String token = authHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
         return token;
     }
 
-    private boolean isTokenBasedAuthentication(String authHeader){
+    private boolean isTokenBasedAuthentication(String authHeader)
+    {
         return authHeader != null && authHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
     }
 
-    private boolean verifyToken(String token) {
-
+    private boolean verifyToken(String token)
+    {
+        return false;
     }
 }

@@ -15,7 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
-import java.time.LocalDateTime;
+import java.security.GeneralSecurityException;
 import java.util.Base64;
 import java.util.List;
 
@@ -25,8 +25,9 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 public class FileResource
 {
 
-    private static       Gson       gson       = SpecializedGson.create();
+    private static       Gson       gson = SpecializedGson.create();
     private static final FileFacade fileFacade = new FileFacade(new JpaFileRepository(JpaConnection.create()));
+
 
     @GET
     @Produces(APPLICATION_JSON)
@@ -40,31 +41,16 @@ public class FileResource
     @POST
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    public Response upload(String json) throws HttpException
+    public Response upload(String json) throws HttpException, IOException
     {
         Received received = gson.fromJson(json, Received.class);
-
-        HttpClient httpClient = new HttpClient();
-        HttpRequest httpRequest = HttpRequestBuilder.getInstance()
-                                                    .post("https://file.io")
-                                                    .urlEncodedBody("text", received.data)
-                                                    .acceptJSON()
-                                                    .build();
-
-        HttpResponse httpResponse = httpClient.perform(httpRequest);
-
-        ResponseEntity response = gson.fromJson(httpResponse.contents, ResponseEntity.class);
-        if (!response.success)
-            throw new IllegalStateException("Could not upload file.");
 
         byte[] bytes = Base64.getDecoder().decode(received.data);
         String mime  = getMimeType(bytes);
         if (mime == null)
             throw new IllegalArgumentException("Bad mime type");
 
-        File file = fileFacade.create(received.title, bytes.length, mime, received.extension, response.key,
-                LocalDateTime.now().plusDays(received.expiryDays));
-
+        File    file    = fileFacade.create(received.title, bytes.length, mime, received.extension, bytes);
         FileDTO fileDTO = new FileDTO(file);
         return Response.status(Response.Status.CREATED).entity(gson.toJson(fileDTO)).build();
     }
@@ -86,7 +72,7 @@ public class FileResource
                     HttpClient httpClient = new HttpClient();
                     HttpRequest httpRequest = HttpRequestBuilder.getInstance()
                                                                 .get()
-                                                                .url("https://file.io/%s", file.getFileIOKey())
+                                                                //                                                                .url("https://file.io/%s", file.getFileIOKey())
                                                                 .build();
                     HttpResponse httpResponse = httpClient.perform(httpRequest);
 
@@ -114,7 +100,6 @@ public class FileResource
     {
         public String title;
         public String extension;
-        public int    expiryDays;
         public String data;
     }
 
