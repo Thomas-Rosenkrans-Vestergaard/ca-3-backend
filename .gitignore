@@ -4,6 +4,7 @@ src/main/**/persistence.xml
 # Ignore test and secret files
 *.test
 *.secret
+tmp/*
 
 # Created by https://www.gitignore.io/api/java,gradle,java-web,intellij+all
 

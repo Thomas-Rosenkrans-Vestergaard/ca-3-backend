@@ -1,7 +1,6 @@
 package com.group3.ca3.data.entities;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "files_")
@@ -24,17 +23,21 @@ public class File
     @Column(nullable = false)
     private String extension;
 
+    @Column(nullable = false)
+    private String googleDriveId;
+
     public File()
     {
 
     }
 
-    public File(String title, int size, String mime, String extension)
+    public File(String title, int size, String mime, String extension, String googleDriveId)
     {
         this.title = title;
         this.size = size;
         this.mime = mime;
         this.extension = extension;
+        this.googleDriveId = googleDriveId;
     }
 
     public Long getId()
@@ -89,6 +92,17 @@ public class File
     public File setExtension(String extension)
     {
         this.extension = extension;
+        return this;
+    }
+
+    public String getGoogleDriveId()
+    {
+        return this.googleDriveId;
+    }
+
+    public File setGoogleDriveId(String googleDriveId)
+    {
+        this.googleDriveId = googleDriveId;
         return this;
     }
 }

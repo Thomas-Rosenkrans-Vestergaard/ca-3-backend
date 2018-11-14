@@ -18,13 +18,13 @@ public class JpaFileRepository implements FileRepository
     }
 
     @Override
-    public File create(String title, int size, String mime, String extension)
+    public File create(String title, int size, String mime, String extension, String googleDriveId)
     {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
             entityManager.getTransaction().begin();
-            File file = new File(title, size, mime, extension);
+            File file = new File(title, size, mime, extension, googleDriveId);
             entityManager.persist(file);
             entityManager.getTransaction().commit();
             return file;
