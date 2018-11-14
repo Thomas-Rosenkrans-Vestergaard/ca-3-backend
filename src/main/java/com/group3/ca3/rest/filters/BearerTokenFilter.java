@@ -3,12 +3,16 @@ package com.group3.ca3.rest.filters;
 //lavet af OAuath
 
 
+import com.group3.ca3.logic.jwt.*;
+import jdk.internal.vm.compiler.collections.EconomicMap;
+
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.ext.Provider;
+import java.io.File;
 import java.io.IOException;
 
 
@@ -18,6 +22,16 @@ public class BearerTokenFilter implements ContainerRequestFilter {
 
     //også kendt som bearer
     private static final String AUTHENTICATION_SCHEME = "Bearer";
+    private static JwtTokenUnpacker jwtTokenUnpacker;
+
+    static {
+        try {
+            jwtTokenUnpacker = new JwtTokenUnpacker(new FileJwtSecret(new File("jwt.secret"), 512 / 8));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     public void filter(ContainerRequestContext ctx) throws IOException {
 
@@ -44,6 +58,10 @@ public class BearerTokenFilter implements ContainerRequestFilter {
     }
 
     private boolean verifyToken(String token) {
-        return true;
+        AuthenticationContext authenticationContext = jwtTokenUnpacker.unpack(token);
+        if (authenticationContext.getRole() == Role.ADMIN || authenticationContext.getRole() == Role.USER) {
+            return true;
+        }
+        return false;
     }
 }
