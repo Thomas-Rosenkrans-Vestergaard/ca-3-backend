@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.group3.ca3.data.entities.User;
 import com.group3.ca3.logic.facade.AuthenticationFacade;
+import com.group3.ca3.rest.filters.Secured;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -22,6 +23,8 @@ public class AuthenticationResource {
     @Inject
     private AuthenticationFacade authenticationFacade;
 
+
+    @Secured
     @POST
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
