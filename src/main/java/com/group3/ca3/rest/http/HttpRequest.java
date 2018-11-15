@@ -17,4 +17,9 @@ public class HttpRequest
         this.headers = headers;
         this.body = body;
     }
+
+    public static HttpRequestBuilder builder()
+    {
+        return new HttpRequestBuilder();
+    }
 }

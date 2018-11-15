@@ -7,18 +7,21 @@ import com.group3.ca3.logic.jwt.AuthenticationContext;
 import com.group3.ca3.logic.jwt.FileJwtSecret;
 import com.group3.ca3.logic.jwt.JwtTokenUnpacker;
 import com.group3.ca3.logic.jwt.Role;
+
 import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.ext.Provider;
 import java.io.File;
 import java.io.IOException;
 
 
+@Secured
 //@Provider
 @PreMatching
-public class BearerTokenFilter implements ContainerRequestFilter {
+public class BearerTokenFilterUser implements ContainerRequestFilter {
 
     //også kendt som bearer
     private static final String AUTHENTICATION_SCHEME = "Bearer";
@@ -37,14 +40,16 @@ public class BearerTokenFilter implements ContainerRequestFilter {
 
         String authHeader = ctx.getHeaderString(HttpHeaders.AUTHORIZATION);
 
-        if (!isTokenBasedAuthentication(authHeader)) {
-            throw new NotAuthorizedException("Bearer");
-        }
-
         String token = parseToken(authHeader);
         if (!verifyToken(token)) {
             throw new NotAuthorizedException("Bearer error=\"invalid_token\"");
         }
+
+        if (!isTokenBasedAuthentication(authHeader)) {
+            throw new NotAuthorizedException("Bearer");
+        }
+
+
 
     }
 
@@ -59,7 +64,7 @@ public class BearerTokenFilter implements ContainerRequestFilter {
 
     private boolean verifyToken(String token) {
         AuthenticationContext authenticationContext = jwtTokenUnpacker.unpack(token);
-        if (authenticationContext.getRole() == Role.ADMIN || authenticationContext.getRole() == Role.USER) {
+        if (authenticationContext.getRole() == Role.USER) {
             return true;
         }
         return false;
