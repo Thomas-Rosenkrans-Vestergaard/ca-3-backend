@@ -22,6 +22,7 @@ public class StarWarsResource
 {
 
     @GET
+    @Path("all")
     @Produces(APPLICATION_JSON)
     public Response getInformation() throws Exception
     {
