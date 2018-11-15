@@ -27,13 +27,22 @@ public class StarWarsResource
     public Response getInformation() throws Exception
     {
         ExecutorService executorService = Executors.newFixedThreadPool(5);
+
+        String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36";
+
         List<StarWarsRequest> requests = Arrays.asList(
-                new StarWarsRequest("films", HttpRequest.builder().header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36").acceptJSON().get("https://swapi.co/api/films/").build()),
-                new StarWarsRequest("people", HttpRequest.builder().header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36").acceptJSON().get("https://swapi.co/api/people/").build()),
-                new StarWarsRequest("planets", HttpRequest.builder().header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36").acceptJSON().get("https://swapi.co/api/planets/").build()),
-                new StarWarsRequest("species", HttpRequest.builder().header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36").acceptJSON().get("https://swapi.co/api/species/").build()),
-                new StarWarsRequest("starships", HttpRequest.builder().header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36").acceptJSON().get("https://swapi.co/api/starships/").build()),
-                new StarWarsRequest("vehicles", HttpRequest.builder().header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36").acceptJSON().get("https://swapi.co/api/vehicles/").build())
+                new StarWarsRequest("films", HttpRequest.builder().header("User-Agent", userAgent)
+                                                        .acceptJSON().get("https://swapi.co/api/films/").build()),
+                new StarWarsRequest("people", HttpRequest.builder().header("User-Agent", userAgent)
+                                                         .acceptJSON().get("https://swapi.co/api/people/").build()),
+                new StarWarsRequest("planets", HttpRequest.builder().header("User-Agent", userAgent)
+                                                          .acceptJSON().get("https://swapi.co/api/planets/").build()),
+                new StarWarsRequest("species", HttpRequest.builder().header("User-Agent", userAgent)
+                                                          .acceptJSON().get("https://swapi.co/api/species/").build()),
+                new StarWarsRequest("starships", HttpRequest.builder().header("User-Agent", userAgent)
+                                                            .acceptJSON().get("https://swapi.co/api/starships/").build()),
+                new StarWarsRequest("vehicles", HttpRequest.builder().header("User-Agent", userAgent)
+                                                           .acceptJSON().get("https://swapi.co/api/vehicles/").build())
         );
 
         HttpClient                     httpClient = new HttpClient();
