@@ -19,7 +19,7 @@ import java.io.IOException;
 
 
 @Secured
-@Provider
+//@Provider
 @PreMatching
 public class BearerTokenFilterUser implements ContainerRequestFilter {
 
