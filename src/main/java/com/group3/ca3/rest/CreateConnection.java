@@ -2,6 +2,7 @@ package com.group3.ca3.rest;
 
 
 import com.google.gson.Gson;
+import com.group3.ca3.rest.http.HttpResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.net.URL;
 
 public class CreateConnection {
 
-    public String sendGetRequest(String URL, boolean apiCode) throws IOException {
+    public HttpResponse sendGetRequest(String URL, boolean apiCode) throws IOException {
         String url = URL;
         URL obj = new URL(url);
         HttpURLConnection httpConnection = (HttpURLConnection) obj.openConnection();
@@ -23,6 +24,9 @@ public class CreateConnection {
         }
         httpConnection.connect();
         int responseCode = httpConnection.getResponseCode();
+        if(responseCode != 200){
+            return new HttpResponse(null, responseCode, "");
+        }
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(httpConnection.getInputStream()));
         String inputLine;
@@ -33,6 +37,6 @@ public class CreateConnection {
         }
         in.close();
         httpConnection.disconnect();
-        return response.toString();
+        return new HttpResponse(null, responseCode, response.toString());
     }
 }
