@@ -1,17 +1,20 @@
 package com.group3.ca3.rest;
 
-public class HearthstoneCard {
+public class HearthstoneCard
+{
 
-    private String flavor;
-    private int attack;
-    private int health;
-    private String img;
-    private int cost;
-    private String name;
-    private String text;
-    private String cardSet;
+    private String  flavor;
+    private Integer attack;
+    private Integer health;
+    private String  img;
+    private Integer cost;
+    private String  name;
+    private String  text;
+    private String  cardSet;
 
-    public HearthstoneCard(String flavor, int attack, int health, String img, int cost, String name, String text, String cardSet) {
+    public HearthstoneCard(String flavor, Integer attack, Integer health, String img, Integer cost, String name, String text,
+                           String cardSet)
+    {
         this.flavor = flavor;
         this.attack = attack;
         this.health = health;
