@@ -9,6 +9,7 @@ public class File
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     @Column(nullable = false)
@@ -26,18 +27,23 @@ public class File
     @Column(nullable = false)
     private String googleDriveId;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public File()
     {
 
     }
 
-    public File(String title, int size, String mime, String extension, String googleDriveId)
+    public File(String title, int size, String mime, String extension, String googleDriveId, User user)
     {
         this.title = title;
         this.size = size;
         this.mime = mime;
         this.extension = extension;
         this.googleDriveId = googleDriveId;
+        this.user = user;
     }
 
     public Long getId()
@@ -104,5 +110,15 @@ public class File
     {
         this.googleDriveId = googleDriveId;
         return this;
+    }
+
+    public User getUser()
+    {
+        return this.user;
+    }
+
+    public void setUser(User user)
+    {
+        this.user = user;
     }
 }

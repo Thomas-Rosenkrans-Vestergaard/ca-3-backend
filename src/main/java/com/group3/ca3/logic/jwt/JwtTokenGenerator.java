@@ -7,19 +7,25 @@ import com.group3.ca3.data.entities.User;
 
 import java.util.Date;
 
-public class JwtTokenGenerator {
+public class JwtTokenGenerator
+{
 
 
-    private final BasicJwtSecret secret;
+    private final JwtSecret secret;
 
 
-    public JwtTokenGenerator(BasicJwtSecret secret) {
+    public JwtTokenGenerator(JwtSecret secret)
+    {
         this.secret = secret;
     }
 
-    public String generateToken(User user){
+    public String generateToken(User user)
+    {
         Algorithm sha512 = Algorithm.HMAC512(secret.getValue());
-        JWTCreator.Builder builder = JWT.create().withClaim("date", new Date()).withClaim("id", user.getId());
+        JWTCreator.Builder builder =
+                JWT.create().withClaim("date", new Date())
+                   .withClaim("user", user.getId())
+                   .withClaim("role", user.getRole().name());
         return builder.sign(sha512);
     }
 

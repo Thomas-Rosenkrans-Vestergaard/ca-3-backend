@@ -2,10 +2,12 @@ package com.group3.ca3.logic.facade;
 
 import com.group3.ca3.data.entities.User;
 import com.group3.ca3.data.repositories.JpaUserRepository;
-import com.group3.ca3.logic.jwt.BasicJwtSecret;
-import com.group3.ca3.logic.jwt.JwtTokenGenerator;
+import com.group3.ca3.logic.jwt.*;
 import com.group3.ca3.rest.JpaConnection;
 import org.mindrot.jbcrypt.BCrypt;
+
+import javax.ws.rs.NotAuthorizedException;
+import java.io.File;
 
 public class AuthenticationFacade
 {
@@ -24,9 +26,61 @@ public class AuthenticationFacade
 
         if (user != null && checkHash) {
             return user;
-
         }
+
         return null;
+    }
+
+    private static final String           AUTHENTICATION_SCHEME = "Bearer";
+    private static final JwtSecret        jwtSecret;
+    private static       JwtTokenUnpacker jwtTokenUnpacker;
+
+    static {
+        try {
+            jwtSecret = new FileJwtSecret(new File("jwt.secret"), 512 / 8);
+            jwtTokenUnpacker = new JwtTokenUnpacker(jwtSecret);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String parseToken(String authHeader)
+    {
+        String token = authHeader.substring(AUTHENTICATION_SCHEME.length()).trim();
+        return token;
+    }
+
+    private boolean isTokenBasedAuthentication(String authHeader)
+    {
+        return authHeader != null && authHeader.toLowerCase().startsWith(AUTHENTICATION_SCHEME.toLowerCase() + " ");
+    }
+
+    public User authorizeUser(String token)
+    {
+        try {
+            AuthenticationContext authenticationContext = jwtTokenUnpacker.unpack(parseToken(token));
+            if (authenticationContext.getRole() == Role.USER) {
+                return jpaRepository.getById(authenticationContext.getId());
+            }
+        } catch (Exception e) {
+            throw new NotAuthorizedException("Error during authentication.");
+        }
+
+        throw new NotAuthorizedException("You must be user.");
+    }
+
+    public User authorizeAdmin(String token)
+    {
+        try {
+            AuthenticationContext authenticationContext = jwtTokenUnpacker.unpack(parseToken(token));
+            if (authenticationContext.getRole() == Role.ADMIN) {
+                return jpaRepository.getById(authenticationContext.getId());
+            }
+        } catch (Exception e) {
+            throw new NotAuthorizedException("Error during authentication.");
+        }
+
+        throw new NotAuthorizedException("You must be admin.");
     }
 
     private Boolean checkPassword(String password, String hashedPassword)
@@ -36,7 +90,6 @@ public class AuthenticationFacade
 
     public String generateAuthenticationToken(User user)
     {
-        BasicJwtSecret    jwtSecret = new BasicJwtSecret(512 / 8);
         JwtTokenGenerator generator = new JwtTokenGenerator(jwtSecret);
         return generator.generateToken(user);
 

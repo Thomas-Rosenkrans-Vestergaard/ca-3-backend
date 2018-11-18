@@ -1,15 +1,17 @@
 package com.group3.ca3.data.repositories;
 
 import com.group3.ca3.data.entities.User;
+import com.group3.ca3.logic.jwt.Role;
 
-public interface UserRepository {
+public interface UserRepository
+{
 
-    public User create(String username, String password, String email);
+    User create(String username, String password, String email, Role role);
 
-    public User delete(User user);
+    User delete(User user);
 
-    public User getById(Long id);
+    User getById(Long id);
 
-    public User getByEmail(String email);
+    User getByEmail(String email);
 
 }

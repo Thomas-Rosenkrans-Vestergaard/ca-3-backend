@@ -1,6 +1,7 @@
 package com.group3.ca3.data.repositories;
 
 import com.group3.ca3.data.entities.File;
+import com.group3.ca3.data.entities.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -18,13 +19,13 @@ public class JpaFileRepository implements FileRepository
     }
 
     @Override
-    public File create(String title, int size, String mime, String extension, String googleDriveId)
+    public File create(String title, int size, String mime, String extension, String googleDriveId, User user)
     {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
             entityManager.getTransaction().begin();
-            File file = new File(title, size, mime, extension, googleDriveId);
+            File file = new File(title, size, mime, extension, googleDriveId, user);
             entityManager.persist(file);
             entityManager.getTransaction().commit();
             return file;
@@ -55,22 +56,12 @@ public class JpaFileRepository implements FileRepository
         }
     }
 
-    @Override public List<File> search(String title)
+    @Override public List<File> getByUser(User user)
     {
         return entityManagerFactory
                 .createEntityManager()
-                .createQuery("SELECT f FROM File f ORDER BY LEVENSHTEIN(:search, f.title) ASC", File.class)
-                .setParameter("search", title)
+                .createQuery("SELECT f FROM File f WHERE f.user = :user", File.class)
+                .setParameter("user", user)
                 .getResultList();
-    }
-
-    @Override public List<File> getByUser(long user)
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override public List<File> searchByUser(String title, long user)
-    {
-        throw new UnsupportedOperationException();
     }
 }

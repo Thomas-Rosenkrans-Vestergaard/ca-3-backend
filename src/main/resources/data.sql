@@ -1,0 +1,1 @@
+INSERT INTO `user_` VALUES (1,'user@email.com','user name','$2a$10$gpHhJrojmG/jgb463rz7PuTBNcEbRIEhRopbYNXVWdpRTUZoL/2IW',0),(2,'admin@email.com','admin name','$2a$10$FLe9s3/8deCpRyLgS8rHQOWLq0b8XFlKz7xjOEM9NiLGpmCJ/bonO',1);

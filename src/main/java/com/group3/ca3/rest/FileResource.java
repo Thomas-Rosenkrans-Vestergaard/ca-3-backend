@@ -2,9 +2,11 @@ package com.group3.ca3.rest;
 
 import com.google.gson.Gson;
 import com.group3.ca3.data.entities.File;
+import com.group3.ca3.data.entities.User;
 import com.group3.ca3.data.repositories.JpaFileRepository;
 import com.group3.ca3.logic.FileFacade;
 import com.group3.ca3.logic.GoogleDriveFacade;
+import com.group3.ca3.logic.facade.AuthenticationFacade;
 import com.group3.ca3.rest.dto.FileDTO;
 import com.group3.ca3.rest.http.HttpException;
 import org.apache.tika.Tika;
@@ -22,16 +24,18 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 public class FileResource
 {
 
-    private static       Gson              gson        = SpecializedGson.create();
-    private static final GoogleDriveFacade driveFacade = new GoogleDriveFacade();
-    private static final FileFacade        fileFacade  = new FileFacade(new JpaFileRepository(JpaConnection.create()),
-                                                                        driveFacade);
+    private static       Gson                 gson                 = SpecializedGson.create();
+    private static final GoogleDriveFacade    driveFacade          = new GoogleDriveFacade();
+    private static final FileFacade           fileFacade           = new FileFacade(new JpaFileRepository(JpaConnection.create()),
+            driveFacade);
+    private static       AuthenticationFacade authenticationFacade = new AuthenticationFacade();
 
     @GET
     @Produces(APPLICATION_JSON)
-    public Response get() throws HttpException
+    public Response get(@HeaderParam("Authorization") String auth) throws HttpException
     {
-        List<File> files = fileFacade.get();
+        User       user  = authenticationFacade.authorizeUser(auth);
+        List<File> files = fileFacade.getByUser(user);
 
         return Response.ok(gson.toJson(files)).build();
     }
@@ -39,8 +43,10 @@ public class FileResource
     @POST
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    public Response upload(String json) throws HttpException, IOException
+    public Response upload(@HeaderParam("Authorization") String auth, String json) throws HttpException, IOException
     {
+        User user = authenticationFacade.authorizeUser(auth);
+
         Received received = gson.fromJson(json, Received.class);
 
         byte[] bytes = Base64.getDecoder().decode(received.data);
@@ -48,14 +54,14 @@ public class FileResource
         if (mime == null)
             throw new IllegalArgumentException("Bad mime type");
 
-        File    file    = fileFacade.create(received.title, mime, received.extension, bytes);
+        File    file    = fileFacade.create(received.title, mime, received.extension, bytes, user);
         FileDTO fileDTO = new FileDTO(file);
         return Response.status(Response.Status.CREATED).entity(gson.toJson(fileDTO)).build();
     }
 
     @GET
     @Path("download/{id: [0-9]+}")
-    public Response download(@PathParam("id") long id) throws Exception
+    public Response download(@HeaderParam("Authorization") String auth, @PathParam("id") long id) throws Exception
     {
         File file = fileFacade.get(id);
         if (file == null)

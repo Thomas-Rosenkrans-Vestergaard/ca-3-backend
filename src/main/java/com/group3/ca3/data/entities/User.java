@@ -3,8 +3,6 @@ package com.group3.ca3.data.entities;
 import com.group3.ca3.logic.jwt.Role;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -42,10 +40,16 @@ public class User
     @Column(nullable = false)
     private String email;
 
-    public User(String name, String passwordHash, String email)
+    public User()
+    {
+
+    }
+
+    public User(String name, String passwordHash, String email, Role role)
     {
         this.name = name;
         this.passwordHash = passwordHash;
+        this.role = role;
         this.email = email;
     }
 

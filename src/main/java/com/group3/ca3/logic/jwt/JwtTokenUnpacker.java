@@ -3,27 +3,26 @@ package com.group3.ca3.logic.jwt;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.group3.ca3.logic.jwt.BasicJwtSecret;
-import com.group3.ca3.logic.jwt.Role;
-import com.group3.ca3.logic.jwt.AuthenticationContext;
 
-public class JwtTokenUnpacker {
+public class JwtTokenUnpacker
+{
 
-    private final FileJwtSecret secret;
+    private final JwtSecret secret;
 
-    public JwtTokenUnpacker(FileJwtSecret secret) {
+    public JwtTokenUnpacker(JwtSecret secret)
+    {
         this.secret = secret;
     }
 
-
-    public AuthenticationContext unpack(String token) {
+    public AuthenticationContext unpack(String token)
+    {
 
         Algorithm sha512 = Algorithm.HMAC512(secret.getValue());
         DecodedJWT decodedJWT = JWT.require(sha512)
-                .build()
-                .verify(token);
+                                   .build()
+                                   .verify(token);
 
-        Long id =  decodedJWT.getClaim("userId").asLong();
+        Long id   = decodedJWT.getClaim("user").asLong();
         Role role = decodedJWT.getClaim("role").as(Role.class);
 
 
