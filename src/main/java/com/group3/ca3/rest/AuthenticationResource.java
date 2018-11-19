@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.group3.ca3.data.entities.User;
 import com.group3.ca3.logic.facade.AuthenticationFacade;
+import com.group3.ca3.logic.jwt.JwtTokenGenerator;
+import com.group3.ca3.logic.jwt.JwtTokenUnpacker;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -18,7 +20,10 @@ public class AuthenticationResource
 {
 
     private static Gson                 gson                 = new GsonBuilder().setPrettyPrinting().create();
-    private static AuthenticationFacade authenticationFacade = new AuthenticationFacade();
+    private static AuthenticationFacade authenticationFacade = new AuthenticationFacade(
+            new JwtTokenUnpacker(SharedSecret.getSecret()),
+            new JwtTokenGenerator(SharedSecret.getSecret())
+    );
 
     @POST
     @Consumes(APPLICATION_JSON)

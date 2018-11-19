@@ -2,12 +2,14 @@ package com.group3.ca3.logic.facade;
 
 import com.group3.ca3.data.entities.User;
 import com.group3.ca3.data.repositories.JpaUserRepository;
-import com.group3.ca3.logic.jwt.*;
+import com.group3.ca3.logic.jwt.AuthenticationContext;
+import com.group3.ca3.logic.jwt.JwtTokenGenerator;
+import com.group3.ca3.logic.jwt.JwtTokenUnpacker;
+import com.group3.ca3.logic.jwt.Role;
 import com.group3.ca3.rest.JpaConnection;
 import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ws.rs.NotAuthorizedException;
-import java.io.File;
 
 public class AuthenticationFacade
 {
@@ -15,8 +17,15 @@ public class AuthenticationFacade
 
     private String timingHash = "$2a$10$TcspcbNbrPac2XnfEBdgVeUfhxkUDZ9hvls5jcRAqb6EODbkAKnUy";
 
-    private JpaUserRepository jpaRepository = new JpaUserRepository(JpaConnection.create());
+    private       JpaUserRepository jpaRepository = new JpaUserRepository(JpaConnection.create());
+    private final JwtTokenUnpacker  jwtTokenUnpacker;
+    private final JwtTokenGenerator jwtTokenGenerator;
 
+    public AuthenticationFacade(JwtTokenUnpacker jwtTokenUnpacker, JwtTokenGenerator jwtTokenGenerator)
+    {
+        this.jwtTokenUnpacker = jwtTokenUnpacker;
+        this.jwtTokenGenerator = jwtTokenGenerator;
+    }
 
     public User authenticateUser(String email, String password)
     {
@@ -31,18 +40,7 @@ public class AuthenticationFacade
         return null;
     }
 
-    private static final String           AUTHENTICATION_SCHEME = "Bearer";
-    private static final JwtSecret        jwtSecret;
-    private static       JwtTokenUnpacker jwtTokenUnpacker;
-
-    static {
-        try {
-            jwtSecret = new FileJwtSecret(new File("jwt.secret"), 512 / 8);
-            jwtTokenUnpacker = new JwtTokenUnpacker(jwtSecret);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final String AUTHENTICATION_SCHEME = "Bearer";
 
     private String parseToken(String authHeader)
     {
@@ -90,8 +88,6 @@ public class AuthenticationFacade
 
     public String generateAuthenticationToken(User user)
     {
-        JwtTokenGenerator generator = new JwtTokenGenerator(jwtSecret);
-        return generator.generateToken(user);
-
+        return jwtTokenGenerator.generateToken(user);
     }
 }

@@ -7,6 +7,8 @@ import com.group3.ca3.data.repositories.JpaFileRepository;
 import com.group3.ca3.logic.FileFacade;
 import com.group3.ca3.logic.GoogleDriveFacade;
 import com.group3.ca3.logic.facade.AuthenticationFacade;
+import com.group3.ca3.logic.jwt.JwtTokenGenerator;
+import com.group3.ca3.logic.jwt.JwtTokenUnpacker;
 import com.group3.ca3.rest.dto.FileDTO;
 import com.group3.ca3.rest.http.HttpException;
 import org.apache.tika.Tika;
@@ -27,8 +29,11 @@ public class FileResource
     private static       Gson                 gson                 = SpecializedGson.create();
     private static final GoogleDriveFacade    driveFacade          = new GoogleDriveFacade();
     private static final FileFacade           fileFacade           = new FileFacade(new JpaFileRepository(JpaConnection.create()),
-            driveFacade);
-    private static       AuthenticationFacade authenticationFacade = new AuthenticationFacade();
+                                                                                    driveFacade);
+    private static       AuthenticationFacade authenticationFacade = new AuthenticationFacade(
+            new JwtTokenUnpacker(SharedSecret.getSecret()),
+            new JwtTokenGenerator(SharedSecret.getSecret())
+    );
 
     @GET
     @Produces(APPLICATION_JSON)
